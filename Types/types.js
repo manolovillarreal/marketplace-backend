@@ -5,7 +5,13 @@ const roles = {
     client:'CLIENT_ROLE'
 }
 
-module.exports = {
-    roles
+const envs={
+    TEST:'test',
+    PROD:'production',
+    DEV: 'development'
 }
 
+module.exports = {
+    roles,
+    envs
+}
