@@ -1,11 +1,12 @@
 const Role = require('../models/role');
 const User = require('../models/user');
 const Product = require('../models/product');
+const { roles } = require('../Types/types');
 
 const isValidRole = async(role = '') => {
 
     const roleExists = await Role.findOne({ role });
-    if ( !roleExists) {
+    if ( !roleExists || role === roles.admin) {
         throw new Error(`el rol ${ role } no es valido`);
     }
 }
