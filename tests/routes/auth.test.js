@@ -26,8 +26,8 @@ describe("auth endpoints", () => {
 
   test("debe rechazar contraseña con menos de 8 digitos", async () => {
     const res = await request(app).post("/api/auth/new").send({
-      name: "Admin 1",
-      email: "admin1@email.com",
+      name: "Test 1",
+      email: "test1@email.com",
       password: "1234567",
       role: "SELLER_ROLE",
     });
@@ -39,8 +39,8 @@ describe("auth endpoints", () => {
 
   test("no debe de crear usuario con rol de administrador", async () => {
     const res = await request(app).post("/api/auth/new").send({
-      name: "Admin 1",
-      email: "admin1@email.com",
+      name: "Test 1",
+      email: "test1@email.com",
       password: "1234567",
       role: "ADMIN_ROLE",
     });
@@ -52,8 +52,8 @@ describe("auth endpoints", () => {
 
   test("debe de crear un nuevo usuario y retornar el token", async () => {
     const res = await request(app).post("/api/auth/new").send({
-      name: "Admin 1",
-      email: "admin1@email.com",
+      name: "Test 1",
+      email: "test1@email.com",
       password: "12345678",
       role: "SELLER_ROLE",
     });
@@ -64,8 +64,8 @@ describe("auth endpoints", () => {
 
   test("no debe crear usuario con nombre o email existentes", async () => {
     const res = await request(app).post("/api/auth/new").send({
-      name: "Admin 1",
-      email: "admin1@email.com",
+      name: "Test 1",
+      email: "test1@email.com",
       password: "12345678",
       role: "SELLER_ROLE",
     });
@@ -83,15 +83,30 @@ describe("auth endpoints", () => {
     expect(errors.some((e) => e.param == "email")).toBe(true);
     expect(errors.some((e) => e.param == "password")).toBe(true);
   });
+  let token;
   test("debe de hacer login exitosamente retornando user y token", async () => {
     const res = await request(app).post("/api/auth/login").send({
-      email: "admin1@email.com",
+      email: "test1@email.com",
       password: "12345678",
     });
-    const { errors } = res.body;
+    expect(res.statusCode).toEqual(200);
+    expect(res.body).toHaveProperty("user");
+    expect(res.body).toHaveProperty("token");
+
+    token = res.body.token;
+  });
+  test("debe de renovar el token", async () => {
+    const res = await request(app)
+      .get("/api/auth/renew")
+      .set("x-token", token)
+      .send({
+        email: "test1@email.com",
+        password: "12345678",
+      });
 
     expect(res.statusCode).toEqual(200);
     expect(res.body).toHaveProperty("user");
     expect(res.body).toHaveProperty("token");
+    expect(res.body).toHaveProperty("ok");
   });
 });
