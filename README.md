@@ -1,4 +1,7 @@
 
 ## Pendientes Backend
 
-* Pruebas unitarias
+* Pruebas unitarias sobre rutas
+  - [x] Auth
+  - [ ] Products
+  - [ ] users
