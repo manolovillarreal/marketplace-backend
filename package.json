@@ -3,8 +3,16 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "start":"node app",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app",
+    "start-dev": "cross-env NODE_ENV=development nodemon app.js",
+    "test": "cross-env NODE_ENV=test jest --testTimeout=10000",
+    "pretest": "cross-env NODE_ENV=test  node ./tests/pretest.js "
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
   },
   "keywords": [],
   "author": "",
@@ -18,5 +26,10 @@
     "express-validator": "^6.13.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.10"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "jest": "^27.3.0",
+    "supertest": "^6.1.6"
   }
 }
